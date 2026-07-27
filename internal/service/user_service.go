@@ -21,6 +21,13 @@ type UserService struct {
 	xrayClient XrayGrpcService
 }
 
+func NewUserService(userRepo *repository.UserRepository, xrayClient XrayGrpcService) *UserService {
+	return &UserService{
+		userRepo:   userRepo,
+		xrayClient: xrayClient,
+	}
+}
+
 func (s *UserService) CreateUser(email string) (*dto.UserResponse, error) {
 	exists, err := s.userRepo.ExistsByEmail(email)
 	if err != nil {

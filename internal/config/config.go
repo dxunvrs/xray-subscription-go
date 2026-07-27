@@ -7,8 +7,6 @@ import (
 )
 
 type Config struct {
-	ServerPort int `env:"SERVER_PORT" env-default:"12258"`
-
 	XrayServerIP           string `env:"XRAY_SERVER_IP" env-default:"127.0.0.1"`
 	XrayServerPort         int    `env:"XRAY_SERVER_PORT" env-default:"443"`
 	XrayRealityPublicKey   string `env:"XRAY_REALITY_PUBLIC_KEY"`

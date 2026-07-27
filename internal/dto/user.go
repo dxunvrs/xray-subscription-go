@@ -15,3 +15,7 @@ type UserResponse struct {
 	UUID    string      `json:"uuid"`
 	Traffic UserTraffic `json:"traffic"`
 }
+
+type CreateUserRequest struct {
+	Email string `json:"email"`
+}
