@@ -26,12 +26,15 @@ func main() {
 	log.Println("БД SQLite подключена")
 
 	userRepo := repository.NewUserRepository(db)
-	// vlessBuilder := service.NewVlessLinkBuilder(config)
+	vlessBuilder := service.NewVlessLinkBuilder(config)
+
 	xrayMock := &MockXrayService{}
 	userService := service.NewUserService(userRepo, xrayMock)
+	subService := service.NewXraySubscriptionService(userRepo, vlessBuilder)
 
+	subHandler := handler.NewSubHandler(subService)
 	adminHandler := handler.NewAdminUserHandler(userService)
-	router := app.NewRouter(adminHandler, config)
+	router := app.NewRouter(adminHandler, subHandler, config)
 
 	addr := ":12258"
 	log.Printf("Сервер запущен")

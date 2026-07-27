@@ -10,11 +10,13 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-func NewRouter(adminHandler *handler.AdminUserHandler, config *config.Config) http.Handler {
+func NewRouter(adminHandler *handler.AdminUserHandler, subHandler *handler.SubHandler, config *config.Config) http.Handler {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+
+	r.Get("/sub/{email}", subHandler.GetSubscription)
 
 	r.Route("/api/admin/users", func(r chi.Router) {
 		r.Use(middleware.BasicAuth("Admin Area", map[string]string{
