@@ -24,7 +24,7 @@ type Config struct {
 func Load() *Config {
 	var config Config
 
-	err := cleanenv.ReadConfig(".env", &config)
+	err := cleanenv.ReadEnv(&config)
 	if err != nil {
 		log.Fatalf("Ошибка загрузки env: %v", err)
 	}
