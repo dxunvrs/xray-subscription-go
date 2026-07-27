@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"log"
+	"xray-subscription-go/internal/config"
+)
 
 func main() {
-	fmt.Println("Hello World")
+	config := config.Load()
+
+	log.Println("Переменные env загружены")
 }
