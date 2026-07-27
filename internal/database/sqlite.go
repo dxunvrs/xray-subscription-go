@@ -4,7 +4,7 @@ import (
 	"log"
 	"xray-subscription-go/internal/model"
 
-	"gorm.io/driver/sqlite"
+	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 )
 
