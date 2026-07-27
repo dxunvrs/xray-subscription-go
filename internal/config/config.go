@@ -14,7 +14,8 @@ type Config struct {
 	XrayRealitySNI         string `env:"XRAY_REALITY_SNI"`
 	XrayRealityFingerprint string `env:"XRAY_REALITY_FINGERPRINT"`
 	XrayGrpcHost           string `env:"XRAY_GRPC_HOST"`
-	XrayGrpcPort           int    `env:"XRAY_GRPC_PORT" env-default:"10058"`
+	XrayGrpcPort           int    `env:"XRAY_GRPC_PORT" env-default:"10085"`
+	XrayVlessInbound       string `env:"XRAY_VLESS_INBOUND" env-default:"vless-inbound"`
 
 	AdminUsername string `env:"ADMIN_USERNAME"`
 	AdminPassword string `env:"ADMIN_PASSWORD"`

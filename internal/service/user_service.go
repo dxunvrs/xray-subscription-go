@@ -9,19 +9,12 @@ import (
 	"github.com/google/uuid"
 )
 
-type XrayGrpcService interface {
-	AddUser(email, userUUID string) error
-	RemoveUser(email string) error
-	GetUserUplink(email string) int64
-	GetUserDownlink(email string) int64
-}
-
 type UserService struct {
 	userRepo   *repository.UserRepository
-	xrayClient XrayGrpcService
+	xrayClient *XrayGrpcClient
 }
 
-func NewUserService(userRepo *repository.UserRepository, xrayClient XrayGrpcService) *UserService {
+func NewUserService(userRepo *repository.UserRepository, xrayClient *XrayGrpcClient) *UserService {
 	return &UserService{
 		userRepo:   userRepo,
 		xrayClient: xrayClient,

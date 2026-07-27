@@ -11,13 +11,6 @@ import (
 	"xray-subscription-go/internal/service"
 )
 
-type MockXrayService struct{}
-
-func (m *MockXrayService) AddUser(email, userUUID string) error { return nil }
-func (m *MockXrayService) RemoveUser(email string) error        { return nil }
-func (m *MockXrayService) GetUserUplink(email string) int64     { return 1024 * 1024 * 50 } // 50 MB
-func (m *MockXrayService) GetUserDownlink(email string) int64   { return 1024 * 1024 }
-
 func main() {
 	config := config.Load()
 	log.Println("Переменные env загружены")
@@ -28,8 +21,18 @@ func main() {
 	userRepo := repository.NewUserRepository(db)
 	vlessBuilder := service.NewVlessLinkBuilder(config)
 
-	xrayMock := &MockXrayService{}
-	userService := service.NewUserService(userRepo, xrayMock)
+	xrayService, err := service.NewXrayGrpcClient(config.XrayGrpcHost, config.XrayGrpcPort, config.XrayVlessInbound)
+	if err != nil {
+		log.Fatalf("Ошибка подключения к gRPC Xray: %v", err)
+	}
+	defer xrayService.Close()
+
+	syncService := service.NewXraySyncService(userRepo, xrayService)
+	if err := syncService.SyncUsersOnStartup(); err != nil {
+		log.Printf("Ошибка при загрузке пользователей из БД: %v", err)
+	}
+
+	userService := service.NewUserService(userRepo, xrayService)
 	subService := service.NewXraySubscriptionService(userRepo, vlessBuilder)
 
 	subHandler := handler.NewSubHandler(subService)
