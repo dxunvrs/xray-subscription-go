@@ -53,6 +53,6 @@ jobs:
           script: |
             cd ~/docker-configs/xray-subscription
             docker compose down
-            docker compose pull ghcr.io/dxunvrs/xray-subscription-go:latest
+            docker pull ghcr.io/dxunvrs/xray-subscription-go:latest
             docker compose up -d 
             docker image prune -f
