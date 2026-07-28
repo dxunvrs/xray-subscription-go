@@ -18,6 +18,16 @@ func NewAdminUserHandler(userService *service.UserService) *AdminUserHandler {
 	return &AdminUserHandler{userService: userService}
 }
 
+// CreateUser godoc
+// @Summary      Создать нового пользователя
+// @Description  Генерирует новый UUID и создает пользователя в Xray и базе данных
+// @Tags         Admin
+// @Accept       json
+// @Produce      json
+// @Security     BasicAuth
+// @Param        request body dto.CreateUserRequest true "Данные для создания пользователя"
+// @Success      201 {object} dto.UserResponse
+// @Router       /api/admin/users [post]
 func (h *AdminUserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var req dto.CreateUserRequest
 
@@ -44,6 +54,14 @@ func (h *AdminUserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, createdUser, http.StatusCreated)
 }
 
+// GetAllUsers godoc
+// @Summary      Получить список всех пользователей
+// @Description  Возвращает массив всех зарегистрированных пользователей
+// @Tags         Admin
+// @Produce      json
+// @Security     BasicAuth
+// @Success      200 {array} dto.UserResponse
+// @Router       /api/admin/users [get]
 func (h *AdminUserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	users, err := h.userService.GetAllUsers()
 	if err != nil {
@@ -54,6 +72,15 @@ func (h *AdminUserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, users, http.StatusOK)
 }
 
+// GetUserByEmail godoc
+// @Summary      Получить пользователя по Email
+// @Description  Возвращает данные конкретного пользователя по его email
+// @Tags         Admin
+// @Produce      json
+// @Security     BasicAuth
+// @Param        email path string true "Email пользователя"
+// @Success      200 {object} dto.UserResponse
+// @Router       /api/admin/users/{email} [get]
 func (h *AdminUserHandler) GetUserByEmail(w http.ResponseWriter, r *http.Request) {
 	email := chi.URLParam(r, "email")
 	if email == "" {
@@ -74,6 +101,14 @@ func (h *AdminUserHandler) GetUserByEmail(w http.ResponseWriter, r *http.Request
 	writeJSON(w, user, http.StatusOK)
 }
 
+// DeleteUserByEmail godoc
+// @Summary      Удалить пользователя по Email
+// @Description  Удаляет пользователя из Xray и базы данных
+// @Tags         Admin
+// @Security     BasicAuth
+// @Param        email path string true "Email пользователя"
+// @Success      204 "No Content"
+// @Router       /api/admin/users/{email} [delete]
 func (h *AdminUserHandler) DeleteUserByEmail(w http.ResponseWriter, r *http.Request) {
 	email := chi.URLParam(r, "email")
 	if email == "" {

@@ -1,0 +1,138 @@
+basePath: /
+definitions:
+  dto.CreateUserRequest:
+    properties:
+      email:
+        type: string
+    type: object
+  dto.UserResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      traffic:
+        $ref: '#/definitions/dto.UserTraffic'
+      uuid:
+        type: string
+    type: object
+  dto.UserTraffic:
+    properties:
+      downlinkBytes:
+        type: integer
+      downlinkFormatted:
+        type: string
+      totalBytes:
+        type: integer
+      totalFormatted:
+        type: string
+      uplinkBytes:
+        type: integer
+      uplinkFormatted:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API сервиса управления подписками Xray.
+  title: Xray Subscription API
+  version: "2.0"
+paths:
+  /api/admin/users:
+    get:
+      description: Возвращает массив всех зарегистрированных пользователей
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.UserResponse'
+            type: array
+      security:
+      - BasicAuth: []
+      summary: Получить список всех пользователей
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Генерирует новый UUID и создает пользователя в Xray и базе данных
+      parameters:
+      - description: Данные для создания пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+      security:
+      - BasicAuth: []
+      summary: Создать нового пользователя
+      tags:
+      - Admin
+  /api/admin/users/{email}:
+    delete:
+      description: Удаляет пользователя из Xray и базы данных
+      parameters:
+      - description: Email пользователя
+        in: path
+        name: email
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BasicAuth: []
+      summary: Удалить пользователя по Email
+      tags:
+      - Admin
+    get:
+      description: Возвращает данные конкретного пользователя по его email
+      parameters:
+      - description: Email пользователя
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+      security:
+      - BasicAuth: []
+      summary: Получить пользователя по Email
+      tags:
+      - Admin
+  /sub/{email}:
+    get:
+      parameters:
+      - description: Email пользователя
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Vless ссылка
+          schema:
+            type: string
+      summary: Получить подписку
+      tags:
+      - Subscription
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

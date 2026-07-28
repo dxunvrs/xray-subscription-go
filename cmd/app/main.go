@@ -11,6 +11,11 @@ import (
 	"xray-subscription-go/internal/service"
 )
 
+// @title           Xray Subscription API
+// @version         2.0
+// @description     API сервиса управления подписками Xray.
+// @BasePath        /
+// @securityDefinitions.basic BasicAuth
 func main() {
 	config := config.Load()
 	log.Println("Переменные env загружены")

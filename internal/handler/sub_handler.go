@@ -18,6 +18,13 @@ func NewSubHandler(subService *service.SubscriptionService) *SubHandler {
 	}
 }
 
+// GetSubscription godoc
+// @Summary      Получить подписку
+// @Tags         Subscription
+// @Produce      text/plain
+// @Param        email path string true "Email пользователя"
+// @Success      200 {string} string "Vless ссылка"
+// @Router       /sub/{email} [get]
 func (h *SubHandler) GetSubscription(w http.ResponseWriter, r *http.Request) {
 	email := chi.URLParam(r, "email")
 	if email == "" {
