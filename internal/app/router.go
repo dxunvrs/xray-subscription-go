@@ -19,9 +19,7 @@ func NewRouter(adminHandler *handler.AdminUserHandler, subHandler *handler.SubHa
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
-	r.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("/swagger/doc.json"),
-	))
+	r.Get("/swagger/*", httpSwagger.Handler())
 
 	r.Get("/sub/{email}", subHandler.GetSubscription)
 

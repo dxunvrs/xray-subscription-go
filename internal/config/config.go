@@ -17,14 +17,14 @@ type Config struct {
 	XrayGrpcPort           int    `env:"XRAY_GRPC_PORT" env-default:"10085"`
 	XrayVlessInbound       string `env:"XRAY_VLESS_INBOUND" env-default:"vless-inbound"`
 
-	AdminUsername string `env:"ADMIN_USERNAME"`
-	AdminPassword string `env:"ADMIN_PASSWORD"`
+	AdminUsername string `env:"ADMIN_USERNAME" env-default:"admin"`
+	AdminPassword string `env:"ADMIN_PASSWORD" env-default:"1234"`
 }
 
 func Load() *Config {
 	var config Config
 
-	err := cleanenv.ReadConfig(".env", &config)
+	err := cleanenv.ReadEnv(&config)
 	if err != nil {
 		log.Fatalf("Ошибка загрузки env: %v", err)
 	}
